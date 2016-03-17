@@ -1,0 +1,18 @@
+## Goes through a user's Home drive and removes the map name with a UNC path
+## Can be used for other locations or used to replace other information in a shortcut target
+Get-ChildItem H:\ -Recurse "" -Include *.lnk | select -ExpandProperty fullname | foreach { 
+    $a = $_
+    $shell = New-Object -COM WScript.Shell
+    $short = $shell.CreateShortcut($a)
+    $path = $short.targetpath
+    $path = $path.replace("`"","")
+    Switch -wildcard ($path) {
+      "H:\*" {$tar = $path.replace("H:\","\\server\home\%username%\")}
+      "I:\*" {$tar = $path.replace("I:\","\\server\Dept Data\IT\")}
+      default {$tar = $path}
+    }
+    $short.targetpath = $tar
+    $short.Description = "Updated"
+    $short.save()
+}
+    
