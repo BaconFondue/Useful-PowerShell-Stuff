@@ -1,4 +1,4 @@
-## Goes through a user's Home drive and removes the map name with a UNC path
+## Goes through a user's Home drive and replaces the map name with a UNC path
 ## Can be used for other locations or used to replace other information in a shortcut target
 Get-ChildItem H:\ -Recurse "" -Include *.lnk | select -ExpandProperty fullname | foreach { 
     $a = $_
